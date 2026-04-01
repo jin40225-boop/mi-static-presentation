@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Maximize, Minimize } from 'lucide-react';
 import { SlideRenderer } from './components/CourseEngine/SlideRenderer';
+import { Sidebar } from './components/CourseEngine/Sidebar';
 import { curriculumData as initialCurriculumData, Slide } from './curriculumData';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 const AppContent: React.FC = () => {
-  const [slides, setSlides] = useState<Slide[]>(initialCurriculumData);
+  const [slides] = useState<Slide[]>(initialCurriculumData);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -14,7 +15,7 @@ const AppContent: React.FC = () => {
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      setIsFullscreen(Boolean(document.fullscreenElement));
     };
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
@@ -28,7 +29,10 @@ const AppContent: React.FC = () => {
       } catch (error) {
         console.error('Error attempting to enable fullscreen:', error);
       }
-    } else if (document.exitFullscreen) {
+      return;
+    }
+
+    if (document.exitFullscreen) {
       await document.exitFullscreen();
     }
   };
@@ -51,13 +55,19 @@ const AppContent: React.FC = () => {
     setCurrentSlideIndex(index);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  const mainMarginClass = 'w-full';
-  const progressMarginClass = 'left-0 right-0';
 
   return (
     <div className="min-h-screen bg-aurora selection:bg-clay-orange/20 flex">
-      <main className={`flex-1 min-h-screen relative overflow-hidden transition-all duration-300 ${mainMarginClass}`}>
-        <div className={`fixed top-0 h-1.5 bg-sand z-50 transition-all duration-300 ${progressMarginClass}`}>
+      {!isFullscreen && (
+        <Sidebar
+          slides={slides}
+          currentSlideIndex={currentSlideIndex}
+          onSlideSelect={handleSlideSelect}
+        />
+      )}
+
+      <main className="flex-1 min-h-screen relative overflow-hidden transition-all duration-300">
+        <div className="fixed top-0 left-0 right-0 h-1.5 bg-sand z-50 transition-all duration-300">
           <motion.div
             className="h-full bg-clay-orange shadow-[0_0_10px_rgba(219,122,78,0.5)]"
             initial={{ width: '0%' }}
@@ -66,14 +76,11 @@ const AppContent: React.FC = () => {
           />
         </div>
 
-        <div className={`max-w-5xl mx-auto py-20 px-10 ${isFullscreen ? 'h-screen flex flex-col justify-center' : ''}`}>
+        <div className={isFullscreen ? 'max-w-5xl mx-auto py-20 px-10 h-screen flex flex-col justify-center' : 'max-w-5xl mx-auto py-20 px-10'}>
           <SlideRenderer
             slide={currentSlide}
             onNext={handleNext}
             onPrev={handlePrev}
-            onSlideSelect={handleSlideSelect}
-            slides={slides}
-            currentSlideIndex={currentSlideIndex}
             isFirst={currentSlideIndex === 0}
             isLast={currentSlideIndex === slides.length - 1}
           />
@@ -87,8 +94,8 @@ const AppContent: React.FC = () => {
           {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
         </button>
 
-        <div className={`fixed top-20 w-96 h-96 bg-clay-orange/5 rounded-full blur-[100px] -z-10 animate-pulse ${isFullscreen ? 'right-20' : 'right-[25rem]'}`} />
-        <div className={`fixed bottom-20 w-64 h-64 bg-golden-sand/5 rounded-full blur-[80px] -z-10 animate-pulse ${isFullscreen ? 'left-20' : 'left-20'}`} />
+        <div className={`fixed top-20 w-96 h-96 bg-clay-orange/5 rounded-full blur-[100px] -z-10 animate-pulse ${isFullscreen ? 'right-20' : 'right-20'}`} />
+        <div className="fixed bottom-20 w-64 h-64 bg-golden-sand/5 rounded-full blur-[80px] -z-10 animate-pulse left-20" />
       </main>
     </div>
   );

@@ -19,22 +19,16 @@ import { DistanceEvaluation } from '../Mechanisms/DistanceEvaluation';
 
 interface SlideRendererProps {
   slide: Slide;
-  slides: Slide[];
-  currentSlideIndex: number;
   onNext: () => void;
   onPrev: () => void;
-  onSlideSelect: (index: number) => void;
   isFirst: boolean;
   isLast: boolean;
 }
 
 export const SlideRenderer: React.FC<SlideRendererProps> = ({
   slide,
-  slides,
-  currentSlideIndex,
   onNext,
   onPrev,
-  onSlideSelect,
   isFirst,
   isLast,
 }) => {
@@ -59,9 +53,9 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
     </div>
   );
 
-  const renderContent = () => {
-    const content = slide.content ?? {};
+  const content = slide.content ?? {};
 
+  const renderContent = () => {
     switch (slide.type) {
       case 'intro':
         return (
@@ -142,10 +136,10 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
               <div className="text-center p-6 bg-clay-orange/5 rounded-3xl border border-clay-orange/10">
                 <p className="text-xl font-bold text-clay-orange">
                   {reflectionScore <= 3
-                    ? '這是一個好的起點，我們可以先從覺察與觀察開始。'
+                    ? '現在可以先從覺察與整理現況開始。'
                     : reflectionScore <= 7
-                      ? '你已經在改變歷程中了，接下來可以更聚焦支持因素。'
-                      : '你已經很接近行動了，可以開始整理下一步的實際做法。'}
+                      ? '你已經在改變歷程中了，可以進一步找出支持前進的力量。'
+                      : '你很接近行動了，下一步可以整理成具體做法。'}
                 </p>
               </div>
             </div>
@@ -156,7 +150,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
                 onClick={onNext}
                 className="px-10 py-5 bg-clay-orange text-white rounded-full font-black text-xl hover:scale-105 transition-transform shadow-xl shadow-clay-orange/20"
               >
-                繼續閱讀
+                下一頁
               </button>
             </div>
           </div>
@@ -238,7 +232,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
 
       case 'stepper':
         if (!content.items) {
-          return renderFallback('此頁內容尚未設定完成。');
+          return renderFallback('此頁內容尚未完成。');
         }
 
         return (
@@ -280,7 +274,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
                   <p className="text-warm-stone">{item.desc}</p>
                   <div className="pt-4">
                     <div className="p-4 bg-sand rounded-2xl text-sm italic text-warm-stone flex justify-between items-center gap-4">
-                      <span>點一下右側按鈕，可以複製一段示範回應語句。</span>
+                      <span>可複製一段示範語句，作為演講時的帶領句型。</span>
                       <button
                         onClick={() => copyToClipboard(item.desc, item.id)}
                         className="p-2 hover:bg-white rounded-lg transition-colors shrink-0"
@@ -326,13 +320,13 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
 
                 <div className="p-8 bg-warm-charcoal text-white rounded-3xl text-left space-y-4">
                   <div className="flex items-center gap-2 text-clay-orange font-black uppercase tracking-widest text-xs">
-                    <MessageSquare size={14} /> MI 提問提示
+                    <MessageSquare size={14} /> MI 提示
                   </div>
                   <p className="text-xl font-medium italic">
-                    你現在給自己的分數是 {reflectionScore}。如果要往前再多走一步，下一個可行的小動作會是什麼？
+                    你現在給自己的分數是 {reflectionScore}。如果要往前再走一步，下一個可行的小動作會是什麼？
                   </p>
                   <p className="text-sm text-white/60">
-                    演講時可以用這張投影片示範量尺問句如何幫助對方說出自己的理由、信心與下一步。
+                    這張投影片適合用來示範量尺問句如何幫助對方說出理由、信心與下一步。
                   </p>
                 </div>
               </div>
@@ -367,7 +361,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
 
       case 'branching':
         if (!content.nodes) {
-          return renderFallback('情境互動內容尚未設定完成。');
+          return renderFallback('情境互動內容尚未完成。');
         }
 
         return (
@@ -377,10 +371,6 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
         );
 
       case 'mechanism':
-        if (!content) {
-          return renderFallback('互動模組內容尚未設定完成。');
-        }
-
         if (content.mechanismId === 'page-live-dashboard-radio') {
           return (
             <div className="max-w-5xl mx-auto py-10">
@@ -420,25 +410,6 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 flex flex-col items-center justify-center px-6">
-        <div className="w-full max-w-6xl mx-auto mb-10">
-          <div className="flex flex-wrap gap-3 justify-center">
-            {slides.map((item, index) => (
-              <button
-                key={item.id}
-                onClick={() => onSlideSelect(index)}
-                className={cn(
-                  'px-4 py-2 rounded-full text-sm font-bold transition-all border',
-                  index === currentSlideIndex
-                    ? 'bg-clay-orange text-white border-clay-orange shadow-lg shadow-clay-orange/20'
-                    : 'bg-white/80 text-warm-stone border-warm-stone/10 hover:border-clay-orange/40 hover:text-warm-charcoal',
-                )}
-              >
-                {item.title}
-              </button>
-            ))}
-          </div>
-        </div>
-
         <AnimatePresence mode="wait">
           <motion.div
             key={slide.id}
