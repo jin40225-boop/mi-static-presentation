@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Maximize, Minimize } from 'lucide-react';
-import { Sidebar } from './components/CourseEngine/Sidebar';
 import { SlideRenderer } from './components/CourseEngine/SlideRenderer';
-import { Inspector } from './components/CourseEngine/Inspector';
 import { curriculumData as initialCurriculumData, Slide } from './curriculumData';
-import { AnnotationProvider } from './contexts/AnnotationContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 const AppContent: React.FC = () => {
@@ -54,24 +51,11 @@ const AppContent: React.FC = () => {
     setCurrentSlideIndex(index);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  const handleSlideUpdate = (updatedSlide: Slide) => {
-    const nextSlides = [...slides];
-    nextSlides[currentSlideIndex] = updatedSlide;
-    setSlides(nextSlides);
-  };
-
-  const showSidebar = !isFullscreen;
-  const showInspector = !isFullscreen;
-  const mainMarginClass = isFullscreen ? 'w-full' : 'ml-72 mr-80';
-  const progressMarginClass = isFullscreen ? 'left-0 right-0' : 'left-72 right-80';
+  const mainMarginClass = 'w-full';
+  const progressMarginClass = 'left-0 right-0';
 
   return (
     <div className="min-h-screen bg-aurora selection:bg-clay-orange/20 flex">
-      {showSidebar && (
-        <Sidebar slides={slides} currentSlideIndex={currentSlideIndex} onSlideSelect={handleSlideSelect} />
-      )}
-
       <main className={`flex-1 min-h-screen relative overflow-hidden transition-all duration-300 ${mainMarginClass}`}>
         <div className={`fixed top-0 h-1.5 bg-sand z-50 transition-all duration-300 ${progressMarginClass}`}>
           <motion.div
@@ -87,6 +71,9 @@ const AppContent: React.FC = () => {
             slide={currentSlide}
             onNext={handleNext}
             onPrev={handlePrev}
+            onSlideSelect={handleSlideSelect}
+            slides={slides}
+            currentSlideIndex={currentSlideIndex}
             isFirst={currentSlideIndex === 0}
             isLast={currentSlideIndex === slides.length - 1}
           />
@@ -101,10 +88,8 @@ const AppContent: React.FC = () => {
         </button>
 
         <div className={`fixed top-20 w-96 h-96 bg-clay-orange/5 rounded-full blur-[100px] -z-10 animate-pulse ${isFullscreen ? 'right-20' : 'right-[25rem]'}`} />
-        <div className={`fixed bottom-20 w-64 h-64 bg-golden-sand/5 rounded-full blur-[80px] -z-10 animate-pulse ${isFullscreen ? 'left-20' : 'left-96'}`} />
+        <div className={`fixed bottom-20 w-64 h-64 bg-golden-sand/5 rounded-full blur-[80px] -z-10 animate-pulse ${isFullscreen ? 'left-20' : 'left-20'}`} />
       </main>
-
-      {showInspector && <Inspector slide={currentSlide} onUpdate={handleSlideUpdate} />}
     </div>
   );
 };
@@ -112,9 +97,7 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <AnnotationProvider>
-        <AppContent />
-      </AnnotationProvider>
+      <AppContent />
     </ErrorBoundary>
   );
 };

@@ -21,9 +21,11 @@ const seedVotes = (options: Option[]) =>
     return acc;
   }, {});
 
-export const LiveDashboard: React.FC<LiveDashboardProps> = ({ title, options = [] }) => {
+export const LiveDashboard: React.FC<LiveDashboardProps> = ({ slideId, title, options = [] }) => {
   const [votes, setVotes] = useState<Record<string, number>>(() => seedVotes(options));
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
+
+  void slideId;
 
   const totalVotes = useMemo(() => Object.values(votes).reduce((sum, count) => sum + count, 0), [votes]);
 
@@ -53,13 +55,16 @@ export const LiveDashboard: React.FC<LiveDashboardProps> = ({ title, options = [
           </div>
           <div>
             <h3 className="text-sm font-black text-warm-charcoal uppercase tracking-wider">現場投票示意</h3>
-            <p className="text-[10px] text-warm-stone font-bold">靜態簡報版，以本地互動模擬課堂參與</p>
+            <p className="text-[10px] text-warm-stone font-bold">單機展示版，可於演講中模擬即時統計效果</p>
           </div>
         </div>
 
-        <button onClick={handleReset} className="inline-flex items-center gap-2 text-xs font-bold text-warm-stone hover:text-clay-orange transition-colors">
+        <button
+          onClick={handleReset}
+          className="inline-flex items-center gap-2 text-xs font-bold text-warm-stone hover:text-clay-orange transition-colors"
+        >
           <RotateCcw size={14} />
-          重置示意票數
+          重設示範
         </button>
       </div>
 
@@ -68,7 +73,7 @@ export const LiveDashboard: React.FC<LiveDashboardProps> = ({ title, options = [
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-4">
-            <div className="text-xs font-black text-warm-stone uppercase tracking-widest mb-6">請選擇你最認同的一項</div>
+            <div className="text-xs font-black text-warm-stone uppercase tracking-widest mb-6">請選擇一個答案</div>
             {options.map((option) => (
               <button
                 key={option.value}
@@ -80,7 +85,7 @@ export const LiveDashboard: React.FC<LiveDashboardProps> = ({ title, options = [
                     ? selectedValue === option.value
                       ? 'border-clay-orange bg-clay-orange/5'
                       : 'border-warm-stone/10 opacity-60'
-                    : 'border-warm-stone/10 hover:border-warm-charcoal hover:shadow-xl hover:-translate-y-1'
+                    : 'border-warm-stone/10 hover:border-warm-charcoal hover:shadow-xl hover:-translate-y-1',
                 )}
               >
                 <div className="flex items-center gap-4">
@@ -93,13 +98,13 @@ export const LiveDashboard: React.FC<LiveDashboardProps> = ({ title, options = [
 
             <div className="p-6 bg-warm-charcoal text-white rounded-2xl text-sm opacity-90 flex items-start gap-3">
               <Vote size={18} className="mt-0.5 shrink-0 text-clay-orange" />
-              <p>這裡保留「現場選項互動」的節奏感，但不再收集外部使用者資料，適合作為演講中的示意與引導。</p>
+              <p>這個區塊用來示範課堂中可能看到的投票互動效果，方便演講時帶出討論。</p>
             </div>
           </div>
 
           <div className="bg-sand/10 rounded-3xl p-8 border border-warm-stone/5">
             <div className="flex items-center justify-between mb-8">
-              <span className="text-xs font-black text-warm-stone uppercase tracking-widest">票數分布</span>
+              <span className="text-xs font-black text-warm-stone uppercase tracking-widest">投票結果</span>
               <span className="text-xs font-bold text-warm-stone">{totalVotes} 票</span>
             </div>
 
@@ -112,7 +117,9 @@ export const LiveDashboard: React.FC<LiveDashboardProps> = ({ title, options = [
                   <div key={option.value} className="space-y-2">
                     <div className="flex justify-between text-sm font-bold">
                       <span className="text-warm-charcoal">{option.label}</span>
-                      <span className="text-warm-stone">{Math.round(percentage)}% ({count})</span>
+                      <span className="text-warm-stone">
+                        {Math.round(percentage)}% ({count})
+                      </span>
                     </div>
                     <div className="h-3 bg-white rounded-full overflow-hidden border border-warm-stone/5">
                       <motion.div
