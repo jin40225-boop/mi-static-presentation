@@ -1,0 +1,22 @@
+{
+  "entities": {
+    "Interaction": {
+      "title": "Interaction",
+      "description": "A student interaction record",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The student's unique ID" },
+        "slideId": { "type": "string", "description": "The ID of the slide where the interaction occurred" },
+        "value": { "type": "string", "description": "The value submitted (e.g., 'yes', 'no', or a specific choice)" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "When the interaction happened" }
+      },
+      "required": ["userId", "slideId", "value", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/interactions/{interactionId}": {
+      "schema": "Interaction",
+      "description": "Collection of student interaction data"
+    }
+  }
+}

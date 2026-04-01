@@ -1,0 +1,72 @@
+[
+  {
+    "id": "page-distance-evaluation",
+    "name": "PageLevel_距離評估與能力調查",
+    "category": "PageLevel",
+    "description": "結合評分與文字輸入的子母互動機制。學員輸入距離分數與最重視的能力，主畫面可切換個別卡片檢視或綜合數據圖表。",
+    "metadata": {
+      "teachingGoal": "透過自我評估與反思，引發學員對助人者角色的共鳴與討論。",
+      "technicalLimit": "需連網，Firestore 免費額度內支援約 50,000 次讀取/日。",
+      "expectedReaction": "學員能看到自己的意見被展示，並透過總表了解群體分佈。",
+      "hardwareRequirement": "教師端建議使用平板或筆電監控，學員端使用手機即可。"
+    },
+    "sop": [
+      "1. 在 Firebase Console 啟用 Firestore 服務。",
+      "2. 建立 'sessions' 集合以實現資料隔離。",
+      "3. 在課程資料中定義 slideId, title, question1, question2。",
+      "4. 主畫面可透過切換按鈕檢視「個別卡片」或「綜合數據」。",
+      "5. 可隨時鎖定填寫，避免資料污染。"
+    ],
+    "parameters": [
+      { "name": "slideId", "type": "string", "required": true },
+      { "name": "title", "type": "string", "required": true },
+      { "name": "question1", "type": "string", "required": true },
+      { "name": "question2", "type": "string", "required": true }
+    ]
+  },
+  {
+    "id": "page-live-dashboard-radio",
+    "name": "PageLevel_即時看板_單選投票",
+    "category": "PageLevel",
+    "description": "學員可即時提交選擇，主畫面同步顯示統計圖表。適用於投票、立場調查、即時統計。",
+    "metadata": {
+      "teachingGoal": "即時收集學員立場，引發課堂討論與共鳴。",
+      "technicalLimit": "需連網，Firestore 免費額度內支援約 50,000 次讀取/日。",
+      "expectedReaction": "學員會因為看到自己的選擇即時呈現在大螢幕（或教師端）而感到驚奇與參與感。",
+      "hardwareRequirement": "教師端建議使用平板或筆電監控，學員端使用手機即可。"
+    },
+    "sop": [
+      "1. 在 Firebase Console 啟用 Firestore 服務。",
+      "2. 建立 'sessions' 集合以實現資料隔離。",
+      "3. 在課程資料中定義 slideId 與 options。",
+      "4. 配置教師端與學員端視圖切換邏輯。"
+    ],
+    "parameters": [
+      { "name": "slideId", "type": "string", "required": true },
+      { "name": "title", "type": "string", "required": true },
+      { "name": "options", "type": "array", "required": true }
+    ]
+  },
+  {
+    "id": "comp-flip-cards",
+    "name": "ComponentLevel_翻轉卡片",
+    "category": "ComponentLevel",
+    "description": "點擊卡片後翻轉顯示背面內容，適合用於名詞解釋、迷思破解、對比概念。",
+    "metadata": {
+      "teachingGoal": "透過隱藏資訊製造懸念，引發學員主動探索與點擊的動機。",
+      "technicalLimit": "純前端動畫，無資料庫依賴，效能極佳。",
+      "expectedReaction": "學員會主動點擊所有卡片以獲取完整資訊。",
+      "hardwareRequirement": "無特殊需求，支援觸控與滑鼠點擊。"
+    },
+    "sop": [
+      "1. 在課程資料中定義 cards 陣列。",
+      "2. 每個 card 需包含 id, frontTitle, backTitle, backContent。",
+      "3. 可選填 color 來自訂卡片主題色。"
+    ],
+    "parameters": [
+      { "name": "title", "type": "string", "required": false },
+      { "name": "description", "type": "string", "required": false },
+      { "name": "cards", "type": "array", "required": true }
+    ]
+  }
+]

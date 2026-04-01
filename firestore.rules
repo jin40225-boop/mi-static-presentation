@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.email == "jin40225@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    function isValidInteraction(data) {
+      return data.keys().hasAll(['userId', 'slideId', 'value', 'timestamp']) &&
+             data.userId is string &&
+             data.slideId is string &&
+             data.value is string &&
+             data.timestamp is string;
+    }
+
+    // ===============================================================
+    // Collections
+    // ===============================================================
+    match /interactions/{interactionId} {
+      // Allow anyone to read for the real-time dashboard
+      allow read: if true;
+      // Allow anyone to create an interaction (simplified for demo)
+      allow create: if isValidInteraction(request.resource.data);
+      // Only admin can delete or update
+      allow update, delete: if isAdmin();
+    }
+
+    match /sessions/{sessionId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.currentSlideIndex is int &&
+        request.resource.data.lockMap is map;
+    }
+
+    match /sessions/{sessionId}/slides/{slideId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.submissions is map;
+    }
+  }
+}
