@@ -76,7 +76,7 @@ const AppContent: React.FC = () => {
           />
         </div>
 
-        <div className={isFullscreen ? 'max-w-5xl mx-auto py-20 px-10 h-screen flex flex-col justify-center' : 'max-w-5xl mx-auto py-20 px-10'}>
+        <div className={isFullscreen ? 'max-w-6xl mx-auto py-20 px-8 md:px-10 h-screen flex flex-col justify-center' : 'max-w-6xl mx-auto py-20 px-6 md:px-10'}>
           <SlideRenderer
             slide={currentSlide}
             onNext={handleNext}

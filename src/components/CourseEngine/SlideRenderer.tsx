@@ -46,8 +46,8 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
   };
 
   const renderFallback = (message: string) => (
-    <div className="flex items-center justify-center min-h-[400px]">
-      <div className="text-center p-8 bg-sand/30 rounded-2xl border border-warm-stone/10">
+    <div className="flex items-center justify-center min-h-[420px]">
+      <div className="text-center p-10 bg-sand/40 rounded-[2rem] border border-warm-stone/10">
         <p className="text-warm-stone font-bold">{message}</p>
       </div>
     </div>
@@ -59,40 +59,44 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
     switch (slide.type) {
       case 'intro':
         return (
-          <div className="text-center space-y-8 py-20">
+          <div className="text-center space-y-10 py-16 md:py-24">
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="inline-block px-4 py-1 bg-clay-orange/10 text-clay-orange rounded-full text-sm font-bold uppercase tracking-widest mb-4"
+              className="inline-flex items-center gap-3 px-5 py-2 bg-white/80 text-clay-orange rounded-full text-sm font-extrabold uppercase tracking-[0.25em] shadow-lg shadow-clay-orange/10"
             >
+              <span className="w-2 h-2 rounded-full bg-clay-orange" />
               Motivational Interviewing
             </motion.div>
+
             <motion.h1
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className="text-6xl md:text-8xl font-black text-warm-charcoal tracking-tighter leading-none"
+              className="display-title text-5xl md:text-7xl lg:text-8xl font-black text-warm-charcoal leading-[0.95]"
             >
               {content.subtitle}
             </motion.h1>
+
             {content.description && (
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-2xl text-warm-stone max-w-2xl mx-auto font-medium"
+                className="text-xl md:text-2xl text-warm-stone max-w-3xl mx-auto font-medium leading-relaxed"
               >
                 {content.description}
               </motion.p>
             )}
+
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="pt-10 flex flex-col items-center gap-2"
+              className="pt-8 flex flex-col items-center gap-2"
             >
-              <div className="text-sm font-bold uppercase tracking-widest text-warm-stone">Instructor</div>
-              <div className="text-xl font-bold">{content.instructor}</div>
+              <div className="text-xs font-black uppercase tracking-[0.3em] text-warm-stone">Speaker</div>
+              <div className="text-2xl font-black text-warm-charcoal">{content.instructor}</div>
               <div className="text-sm text-warm-stone">{content.organization}</div>
             </motion.div>
           </div>
@@ -100,13 +104,15 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
 
       case 'reflection':
         return (
-          <div className="max-w-2xl mx-auto space-y-12 py-10">
+          <div className="max-w-3xl mx-auto space-y-12 py-10">
             <div className="text-center space-y-4">
-              <h2 className="text-4xl font-black text-warm-charcoal tracking-tight">{content.question}</h2>
+              <h2 className="display-title text-4xl md:text-5xl font-black text-warm-charcoal leading-tight">
+                {content.question}
+              </h2>
               {content.hint && <p className="text-warm-stone font-medium italic">{content.hint}</p>}
             </div>
 
-            <div className="glass-panel p-10 rounded-[40px] space-y-10">
+            <div className="glass-panel p-8 md:p-12 rounded-[2.5rem] space-y-10">
               <div className="relative h-4 bg-sand rounded-full overflow-hidden border border-warm-stone/10">
                 <div
                   className="absolute inset-y-0 left-0 bg-clay-orange transition-all duration-500"
@@ -122,7 +128,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
                 />
               </div>
 
-              <div className="flex justify-between text-4xl font-black text-warm-stone/30">
+              <div className="flex justify-between text-3xl md:text-4xl font-black text-warm-stone/30">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
                   <span
                     key={value}
@@ -133,19 +139,19 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
                 ))}
               </div>
 
-              <div className="text-center p-6 bg-clay-orange/5 rounded-3xl border border-clay-orange/10">
-                <p className="text-xl font-bold text-clay-orange">
+              <div className="text-center p-6 md:p-8 bg-clay-orange/5 rounded-3xl border border-clay-orange/10">
+                <p className="text-lg md:text-xl font-bold text-clay-orange leading-relaxed">
                   {reflectionScore <= 3
-                    ? '現在可以先從覺察與整理現況開始。'
+                    ? '這是一個很真實的起點，先從看見自己現在的位置開始就很好。'
                     : reflectionScore <= 7
-                      ? '你已經在改變歷程中了，可以進一步找出支持前進的力量。'
-                      : '你很接近行動了，下一步可以整理成具體做法。'}
+                      ? '你已經不是完全沒動力了，接下來可以更聚焦支持你前進的力量。'
+                      : '你其實離行動不遠了，現在最重要的是把想法整理成一個可行的小步驟。'}
                 </p>
               </div>
             </div>
 
             <div className="text-center">
-              {content.cta && <p className="text-2xl font-bold text-warm-charcoal mb-8">{content.cta}</p>}
+              {content.cta && <p className="text-xl md:text-2xl font-bold text-warm-charcoal mb-8">{content.cta}</p>}
               <button
                 onClick={onNext}
                 className="px-10 py-5 bg-clay-orange text-white rounded-full font-black text-xl hover:scale-105 transition-transform shadow-xl shadow-clay-orange/20"
@@ -158,7 +164,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
 
       case 'content':
         return (
-          <div className="max-w-5xl mx-auto space-y-10 py-10">
+          <div className="max-w-5xl mx-auto space-y-10 py-8">
             {content.paragraphs && (
               <div className="space-y-6 mb-10">
                 {content.paragraphs.map((paragraph: string, index: number) => (
@@ -166,8 +172,8 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
                     key={index}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="text-2xl text-warm-charcoal font-medium leading-relaxed"
+                    transition={{ delay: index * 0.08 }}
+                    className="text-xl md:text-2xl text-warm-charcoal font-medium leading-relaxed"
                   >
                     {paragraph}
                   </motion.p>
@@ -182,7 +188,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
               )}
             >
               {content.core && (
-                <div className="glass-panel p-8 rounded-3xl space-y-6">
+                <div className="glass-panel p-8 rounded-[2rem] space-y-6">
                   <h3 className="text-2xl font-black flex items-center gap-2">
                     <Lightbulb className="text-clay-orange" /> 核心重點
                   </h3>
@@ -198,7 +204,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
               )}
 
               {content.scope && (
-                <div className="glass-panel p-8 rounded-3xl space-y-6">
+                <div className="glass-panel p-8 rounded-[2rem] space-y-6">
                   <h3 className="text-2xl font-black flex items-center gap-2">
                     <Target className="text-clay-orange" /> 應用範圍
                   </h3>
@@ -215,11 +221,11 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
               {content.items?.map((item: any, index: number) => (
                 <div
                   key={index}
-                  className="glass-panel p-8 rounded-3xl space-y-4 hover:border-clay-orange/30 transition-colors group"
+                  className="glass-panel p-8 md:p-9 rounded-[2rem] space-y-4 hover:border-clay-orange/30 transition-colors group"
                 >
                   {item.icon && (
-                    <div className="w-12 h-12 bg-clay-orange/10 text-clay-orange rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <item.icon size={24} />
+                    <div className="w-14 h-14 bg-clay-orange/10 text-clay-orange rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <item.icon size={26} />
                     </div>
                   )}
                   <h3 className="text-2xl font-black text-warm-charcoal">{item.title}</h3>
@@ -242,19 +248,19 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
                 key={index}
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.08 }}
                 className="flex gap-6 group"
               >
                 <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-clay-orange text-white flex items-center justify-center font-black z-10 shadow-lg shadow-clay-orange/20">
+                  <div className="w-11 h-11 rounded-full bg-clay-orange text-white flex items-center justify-center font-black z-10 shadow-lg shadow-clay-orange/20">
                     {index + 1}
                   </div>
                   {index < content.items.length - 1 && <div className="w-1 flex-1 bg-sand my-2 rounded-full" />}
                 </div>
                 <div className="flex-1 pb-10">
-                  <div className="glass-panel p-6 rounded-3xl group-hover:translate-x-2 transition-transform">
-                    <h3 className="text-xl font-black mb-2">{item.title}</h3>
-                    <p className="text-warm-stone leading-relaxed">{item.desc}</p>
+                  <div className="glass-panel p-7 rounded-[2rem] group-hover:translate-x-2 transition-transform">
+                    <h3 className="text-xl md:text-2xl font-black mb-3">{item.title}</h3>
+                    <p className="text-warm-stone leading-relaxed text-lg">{item.desc}</p>
                   </div>
                 </div>
               </motion.div>
@@ -267,14 +273,14 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
           return (
             <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 py-10">
               {content.items.map((item: any) => (
-                <div key={item.id} className="glass-panel p-8 rounded-[40px] space-y-4 relative overflow-hidden group">
+                <div key={item.id} className="glass-panel p-8 rounded-[2.5rem] space-y-4 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-clay-orange/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                   <div className="text-5xl font-black text-clay-orange/20">{item.id}</div>
                   <h3 className="text-2xl font-black">{item.title}</h3>
-                  <p className="text-warm-stone">{item.desc}</p>
+                  <p className="text-warm-stone text-lg leading-relaxed">{item.desc}</p>
                   <div className="pt-4">
                     <div className="p-4 bg-sand rounded-2xl text-sm italic text-warm-stone flex justify-between items-center gap-4">
-                      <span>可複製一段示範語句，作為演講時的帶領句型。</span>
+                      <span>可複製一句示範語句，作為演講帶領時的提示。</span>
                       <button
                         onClick={() => copyToClipboard(item.desc, item.id)}
                         className="p-2 hover:bg-white rounded-lg transition-colors shrink-0"
@@ -293,8 +299,8 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
         if (content.type === 'scaling') {
           return (
             <div className="max-w-3xl mx-auto py-10">
-              <div className="glass-panel p-12 rounded-[50px] space-y-12 text-center">
-                <h3 className="text-3xl font-black">{content.question}</h3>
+              <div className="glass-panel p-10 md:p-12 rounded-[3rem] space-y-12 text-center">
+                <h3 className="display-title text-3xl md:text-4xl font-black leading-tight">{content.question}</h3>
                 <div className="relative py-10">
                   <div className="h-4 bg-sand rounded-full border border-warm-stone/10" />
                   <input
@@ -322,11 +328,11 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
                   <div className="flex items-center gap-2 text-clay-orange font-black uppercase tracking-widest text-xs">
                     <MessageSquare size={14} /> MI 提示
                   </div>
-                  <p className="text-xl font-medium italic">
+                  <p className="text-xl font-medium italic leading-relaxed">
                     你現在給自己的分數是 {reflectionScore}。如果要往前再走一步，下一個可行的小動作會是什麼？
                   </p>
                   <p className="text-sm text-white/60">
-                    這張投影片適合用來示範量尺問句如何幫助對方說出理由、信心與下一步。
+                    這張投影片適合示範量尺問句如何幫助對方說出理由、信心與下一步。
                   </p>
                 </div>
               </div>
@@ -338,24 +344,30 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
 
       case 'summary':
         return (
-          <div className="max-w-3xl mx-auto py-16 text-center space-y-12">
-            <div className="w-24 h-24 bg-clay-orange/10 rounded-full flex items-center justify-center mx-auto mb-8">
+          <div className="max-w-4xl mx-auto py-14 text-center space-y-12">
+            <div className="w-24 h-24 bg-clay-orange/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 size={48} className="text-clay-orange" />
             </div>
-            <h2 className="text-5xl font-black text-warm-charcoal tracking-tight">{slide.title}</h2>
+            <h2 className="display-title text-4xl md:text-6xl font-black text-warm-charcoal leading-tight">
+              {slide.title}
+            </h2>
             {content.points && (
-              <div className="glass-panel p-12 rounded-[40px] space-y-6 text-left">
+              <div className="glass-panel p-10 md:p-12 rounded-[2.5rem] space-y-6 text-left">
                 {content.points.map((point: string, index: number) => (
                   <div key={index} className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-clay-orange text-white flex items-center justify-center font-black shrink-0 mt-1">
                       {index + 1}
                     </div>
-                    <p className="text-2xl text-warm-charcoal font-medium leading-relaxed">{point}</p>
+                    <p className="text-xl md:text-2xl text-warm-charcoal font-medium leading-relaxed">{point}</p>
                   </div>
                 ))}
               </div>
             )}
-            {content.conclusion && <p className="text-xl text-warm-stone italic font-medium">{content.conclusion}</p>}
+            {content.conclusion && (
+              <p className="text-lg md:text-xl text-warm-stone italic font-medium max-w-3xl mx-auto leading-relaxed">
+                {content.conclusion}
+              </p>
+            )}
           </div>
         );
 
@@ -409,7 +421,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center px-6">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 md:px-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={slide.id}
