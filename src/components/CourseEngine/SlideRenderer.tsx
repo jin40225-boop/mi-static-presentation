@@ -59,7 +59,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
     switch (slide.type) {
       case 'intro':
         return (
-          <div className="text-center space-y-10 py-16 md:py-24">
+          <div className="space-y-8 py-12 text-center md:space-y-10 md:py-24">
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -73,7 +73,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className="display-title text-5xl md:text-7xl lg:text-8xl font-black text-warm-charcoal leading-[0.95]"
+              className="display-title text-4xl font-black leading-[0.95] text-warm-charcoal sm:text-5xl md:text-7xl lg:text-8xl"
             >
               {content.subtitle}
             </motion.h1>
@@ -83,7 +83,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-xl md:text-2xl text-warm-stone max-w-3xl mx-auto font-medium leading-relaxed"
+                className="mx-auto max-w-3xl text-lg font-medium leading-relaxed text-warm-stone sm:text-xl md:text-2xl"
               >
                 {content.description}
               </motion.p>
@@ -104,9 +104,9 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
 
       case 'reflection':
         return (
-          <div className="max-w-3xl mx-auto space-y-12 py-10">
+          <div className="mx-auto max-w-3xl space-y-10 py-10 md:space-y-12">
             <div className="text-center space-y-4">
-              <h2 className="display-title text-4xl md:text-5xl font-black text-warm-charcoal leading-tight">
+              <h2 className="display-title text-3xl font-black leading-tight text-warm-charcoal sm:text-4xl md:text-5xl">
                 {content.question}
               </h2>
               {content.hint && <p className="text-warm-stone font-medium italic">{content.hint}</p>}
@@ -435,11 +435,11 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
         </AnimatePresence>
       </div>
 
-      <div className="fixed bottom-10 right-10 flex gap-4 z-50">
+      <div className="fixed inset-x-4 bottom-4 z-30 flex items-center justify-between gap-3 md:inset-x-auto md:bottom-10 md:right-10 md:justify-start md:gap-4">
         {!isFirst && (
           <button
             onClick={onPrev}
-            className="p-4 glass-panel rounded-2xl hover:bg-warm-charcoal hover:text-white transition-all group"
+            className="p-3.5 glass-panel rounded-2xl hover:bg-warm-charcoal hover:text-white transition-all group md:p-4"
             title="上一頁"
           >
             <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
@@ -450,7 +450,7 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
           onClick={onNext}
           disabled={isLast}
           className={cn(
-            'px-8 py-4 rounded-2xl font-black text-lg flex items-center gap-2 transition-all shadow-xl',
+            'px-6 py-4 rounded-2xl font-black text-base flex flex-1 items-center justify-center gap-2 transition-all shadow-xl md:px-8 md:text-lg md:flex-none',
             isLast
               ? 'bg-warm-stone/20 text-warm-stone cursor-not-allowed'
               : 'bg-clay-orange text-white hover:scale-105 shadow-clay-orange/20',

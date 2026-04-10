@@ -7,31 +7,55 @@ interface SidebarProps {
   slides: Slide[];
   currentSlideIndex: number;
   onSlideSelect: (index: number) => void;
+  onNavigate?: () => void;
+  variant?: 'desktop' | 'mobile';
 }
 
 const partIcons = [BookOpen, MessageSquare, Zap, Target, CheckCircle2];
 
-export const Sidebar: React.FC<SidebarProps> = ({ slides, currentSlideIndex, onSlideSelect }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  slides,
+  currentSlideIndex,
+  onSlideSelect,
+  onNavigate,
+  variant = 'desktop',
+}) => {
   const parts = Array.from(new Set(slides.map((slide) => slide.part)));
+  const isMobile = variant === 'mobile';
 
   return (
-    <aside className="w-80 h-screen sticky top-0 shrink-0 bg-sand/55 backdrop-blur-xl border-r border-warm-stone/10 p-6 overflow-hidden">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-clay-orange rounded-2xl flex items-center justify-center text-white shadow-lg shadow-clay-orange/20">
+    <aside
+      className={cn(
+        'shrink-0 border-r border-warm-stone/10 overflow-hidden',
+        isMobile
+          ? 'h-full w-full bg-warm-cream/95 px-5 py-5 backdrop-blur-2xl'
+          : 'sticky top-0 h-screen w-80 bg-sand/55 p-6 backdrop-blur-xl',
+      )}
+    >
+      <div className={cn('mb-8', isMobile && 'mb-6')}>
+        <div className="mb-3 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-clay-orange text-white shadow-lg shadow-clay-orange/20">
             <BookOpen size={20} />
           </div>
           <div>
-            <h1 className="text-xl font-black text-warm-charcoal tracking-tight">MI 簡報大綱</h1>
+            <h1 className={cn('font-black tracking-tight text-warm-charcoal', isMobile ? 'text-lg' : 'text-xl')}>
+              MI 簡報大綱
+            </h1>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-warm-stone">Presentation Outline</p>
           </div>
         </div>
-        <p className="text-sm text-warm-stone leading-relaxed">
+
+        <p className="text-sm leading-relaxed text-warm-stone">
           左側保留章節導覽，右側專心呈現投影片內容。
         </p>
       </div>
 
-      <div className="overflow-y-auto h-[calc(100vh-10rem)] pr-2 custom-scrollbar space-y-8">
+      <div
+        className={cn(
+          'custom-scrollbar space-y-8 overflow-y-auto pr-2',
+          isMobile ? 'h-[calc(100dvh-8rem)] pb-6' : 'h-[calc(100vh-10rem)]',
+        )}
+      >
         {parts.map((part) => {
           const Icon = partIcons[part - 1] ?? BookOpen;
           const partSlides = slides.filter((slide) => slide.part === part);
@@ -52,12 +76,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ slides, currentSlideIndex, onS
                   return (
                     <button
                       key={slide.id}
-                      onClick={() => onSlideSelect(index)}
+                      onClick={() => {
+                        onSlideSelect(index);
+                        onNavigate?.();
+                      }}
+                      data-testid={`slide-nav-${slide.id}`}
+                      aria-current={isActive ? 'step' : undefined}
                       className={cn(
-                        'w-full text-left px-4 py-3 rounded-2xl transition-all duration-300 flex items-center justify-between gap-3 group',
+                        'group flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left transition-all duration-300',
                         isActive
                           ? 'bg-clay-orange text-white shadow-lg shadow-clay-orange/20'
-                          : 'bg-white/55 text-warm-stone hover:bg-white hover:text-warm-charcoal border border-warm-stone/5',
+                          : 'border border-warm-stone/5 bg-white/55 text-warm-stone hover:bg-white hover:text-warm-charcoal',
                       )}
                     >
                       <span className="text-sm font-bold leading-snug">{slide.title}</span>
@@ -66,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ slides, currentSlideIndex, onS
                       ) : isCompleted ? (
                         <CheckCircle2 size={16} className="shrink-0 text-green-500" />
                       ) : (
-                        <div className="w-2.5 h-2.5 rounded-full bg-warm-stone/20 group-hover:bg-clay-orange/40 shrink-0" />
+                        <div className="h-2.5 w-2.5 shrink-0 rounded-full bg-warm-stone/20 group-hover:bg-clay-orange/40" />
                       )}
                     </button>
                   );

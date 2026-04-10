@@ -6,6 +6,11 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   base: './',
   plugins: [react(), tailwindcss()],
+  server: {
+    watch: {
+      ignored: ['**/docs/**'],
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),

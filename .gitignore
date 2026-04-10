@@ -5,6 +5,8 @@ coverage/
 .DS_Store
 *.log
 .playwright-cli/
+playwright-report/
+test-results/
 archive/*.zip
 .env*
 !.env.example
